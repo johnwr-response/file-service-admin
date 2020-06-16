@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  jms:
+    container_name: jms
+    image: vromero/activemq-artemis
+    ports:
+      - '8161:8161'
+      - '61616:61616'
+  mysql:
+    container_name: mysql
+    image: mysql
+    environment:
+      - "MYSQL_ROOT_PASSWORD=1234"
+    ports:
+      - '3306:3306'
+    volumes:
+      - "./volumes/db_data:/var/lib/mysql"
