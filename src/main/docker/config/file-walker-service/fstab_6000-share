@@ -1,0 +1,2 @@
+# UNCONFIGURED FSTAB FOR BASE SYSTEM
+//192.168.20.74/Share 	/mnt/walkfolder 	cifs 	uid=0,username=cifs,password=cifs,vers=2.0,,iocharset=utf8,noperm 0 0

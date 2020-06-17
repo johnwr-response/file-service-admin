@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+  jms:
+    container_name: jms
+    image: vromero/activemq-artemis
+    ports:
+      - '8161:8161'
+      - '61616:61616'
+  mysql:
+    container_name: mysql
+    image: mysql
+    environment:
+      - "MYSQL_ROOT_PASSWORD=1234"
+    ports:
+      - '3306:3306'
+    volumes:
+      - "./volumes/db_data:/var/lib/mysql"
+  filewalkerservice:
+    container_name: file-walker-service
+    image: johnwr/file-walker-service
+    ports:
+      - '8070:8070'
+    volumes:
+      - ./config/file-walker-service/fstab_6000-share:/etc/fstab
+    environment:
+      RESPONSE_FILESTORE_WALK-PATH: /mnt/walkfolder/Test
+      RESPONSE_SCHEDULING_FIXED-DELAY-TIME: PT1H
+      RESPONSE_SCHEDULING_INITIAL-DELAY-TIME: PT20S
+    privileged: true
+    user: root
