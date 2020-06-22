@@ -15,16 +15,38 @@ services:
       - '3306:3306'
     volumes:
       - "./volumes/db_data:/var/lib/mysql"
+  filestoreservice:
+    container_name: file-store-service
+    image: johnwr/file-store-service
+    environment:
+      SPRING_PROFILES_ACTIVE: dockermysql
+      SPRING_ARTEMIS_HOST: jms
+    depends_on:
+      - mysql
+      - jms
+  fileinfoservice:
+    container_name: file-info-service
+    image: johnwr/file-info-service
+    ports:
+      - '8071:8071'
+    environment:
+      SPRING_PROFILES_ACTIVE: dockermysql
+    depends_on:
+      - filestoreservice
+      - mysql
   filewalkerservice:
     container_name: file-walker-service
     image: johnwr/file-walker-service
-    ports:
-      - '8070:8070'
     volumes:
       - ./config/file-walker-service/fstab_6000-share:/etc/fstab
     environment:
-      RESPONSE_FILESTORE_WALK-PATH: /mnt/walkfolder/Test
+      SPRING_PROFILES_ACTIVE: docker
+#      RESPONSE_FILESTORE_OVERRIDE-WALK-PATH: /mnt/walkfolder/Test
       RESPONSE_SCHEDULING_FIXED-DELAY-TIME: PT1H
       RESPONSE_SCHEDULING_INITIAL-DELAY-TIME: PT20S
+#      RESPONSE_FILEINFOSERVICE_HOST: http://fileinfoservice:8071
+#      SPRING_ARTEMIS_HOST: jms
     privileged: true
     user: root
+    depends_on:
+      - jms
