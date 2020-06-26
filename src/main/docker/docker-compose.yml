@@ -15,6 +15,11 @@ services:
       - '3306:3306'
     volumes:
       - "./volumes/db_data:/var/lib/mysql"
+  zipkin:
+    container_name: zipkin
+    image: openzipkin/zipkin
+    ports:
+      - '9411:9411'
   filestoreservice:
     container_name: file-store-service
     image: johnwr/file-store-service
