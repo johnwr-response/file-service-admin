@@ -15,6 +15,23 @@ services:
       - '3306:3306'
     volumes:
       - "./volumes/db_data:/var/lib/mysql"
+  liresolr:
+    container_name: liresolr
+    image: dermotte/liresolr
+    ports:
+      - '8984:8983'
+#    volumes:
+#      - "./volumes/liresolr_data:/var/solr"
+  solr:
+    container_name: solr
+    image: solr
+    ports:
+      - '8983:8983'
+    volumes:
+      - "./volumes/solr_data:/var/solr"
+    command:
+      - solr-precreate
+      - gettingstarted
   zipkin:
     container_name: zipkin
     image: openzipkin/zipkin
